@@ -29,13 +29,11 @@ namespace Cw5.Middlewares
                 }
 
 
-                using (StreamWriter write = File.CreateText("requestLog.txt"))
-                {
-                    write.WriteLine($"metoda:  {method}");
-                    write.WriteLine($"scieżka:  {path}");
-                    write.WriteLine(body);
-                    write.WriteLine(queryString);
-                }
+                using StreamWriter write = File.AppendText("requestLog.txt");
+                write.WriteLine($"metoda:  {method}");
+                write.WriteLine($"scieżka:  {path}");
+                write.WriteLine(body);
+                write.WriteLine(queryString);
 
 
             }
