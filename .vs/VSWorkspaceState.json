@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Controllers",
+    "\\DTO-s",
+    "\\DTO-s\\Requests",
+    "\\Middlewares",
+    "\\Models"
+  ],
+  "SelectedNode": "\\Controllers\\EnrollmentsController.cs",
+  "PreviewInSolutionExplorer": false
+}

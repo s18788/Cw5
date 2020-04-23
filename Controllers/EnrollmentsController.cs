@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Cw5.DTO_s.Requests;
 using Cw5.Services;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cw5.Controllers
@@ -16,8 +17,10 @@ namespace Cw5.Controllers
         {
             _service = service;
         }
+
         [Route("api/enrollments")]
         [HttpPost]
+        [Authorize(Roles= "employee")]
         public IActionResult EnrollStudent(EnrollStudentRequest request)
         {
             if (request.IndexNumber == null
@@ -42,6 +45,7 @@ namespace Cw5.Controllers
 
         [Route("api/enrollments/promotions")]
         [HttpPost]
+        [Authorize(Roles = "employee")]
         public IActionResult PromoteStudent(PromoteStudentRequest request)
         {
             try
@@ -54,5 +58,36 @@ namespace Cw5.Controllers
             }
             return Ok();
         }
+
+        [Route("api/login")]
+        [HttpPost]
+        public IActionResult LogIn(LoginRequest request){
+        
+         var claims = new[]
+{
+                new Claim(ClaimTypes.NameIdentifier, request.IndexNumber),
+                new Claim(ClaimTypes.Role, "employee"),
+                new Claim(ClaimTypes.Role, "student")
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken
+            (
+                issuer: "Cw_07",
+                audience: "Students",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(10),
+                signingCredentials: creds
+            );
+
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                refreshToken=Guid.NewGuid()
+            });
+        }
+                      
     }
 }

@@ -13,6 +13,7 @@ namespace Cw5.Models
         private string LastName { get; set; }
         private DateTime Birthdate { get; set; }
         private string Studies { get; set; }
+        private string password{ get; set; }
 
     }
 }
